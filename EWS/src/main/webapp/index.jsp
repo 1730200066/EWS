@@ -21,29 +21,28 @@
                 <li>用户注册</li>
             </ul>
             <div class="layui-tab-content">
-
                 <div class="layui-tab-item layui-show">
                     <div class="layui-card">
                         <div class="layui-card-body">
-                            <form>
+                            <form id="loginform">
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">用户名：</label>
                                     <div class="layui-input-block">
-                                        <input type="text" id="uname" name="uname" lay-verify="required"
+                                        <input type="text" id="uname" name="uname" required="required"
                                                autocomplete="off" placeholder="请输入用户名" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">密码：</label>
                                     <div class="layui-input-block">
-                                        <input type="password" id="upwd" name="upwd" lay-verify="required"
+                                        <input type="password" id="upwd" name="upwd" required="required"
                                                placeholder="请输入密码" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">验证码：</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" id="vcode" name="vcode" lay-verify="required"
+                                        <input type="text" id="vcode" name="vcode" required="required"
                                                placeholder="请输入验证码" autocomplete="off" class="layui-input">
                                     </div>
                                     <div id="checkCode" onclick="refreshVcode()"></div>
@@ -56,9 +55,45 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="layui-tab-item">
-                    我是注册界面
+                    <div class="layui-card">
+                        <div class="layui-card-body">
+                            <form id="signupform">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">用户名：<span style="color: red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="signupname" name="signupname" required="required"
+                                               placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">电子邮件地址：<span style="color: red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="email" id="email" name="email" required="required"
+                                               placeholder="请输入电子邮件地址" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">密码：<span style="color: red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="password" id="signuppwd" name="signuppwd" required="required"
+                                               placeholder="请输入您要设置的密码，不少于六位" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">重复密码：<span style="color: red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="password" id="signuppwd2" name="signuppwd2" required="required"
+                                               placeholder="请重复您设置的密码" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" align="center">
+                                    <a class="layui-btn" href="javascript:signup()">注册</a>
+                                    <a class="layui-btn layui-btn-normal" href="javascript:reset()">重置</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -93,6 +128,7 @@
             layer.tips("密码长度应大于6位!", "#upwd", {tips: [2, '#FF0000'], time: 3000});
             return;
         }
+        var code=document.getElementById("checkCode").innerHTML;
         var vcode = $("#vcode").val();
         if (vcode.length == 0) {
             layer.tips("验证码不能为空!", "#vcode", {tips: [1, '#FF0000'], time: 3000});
@@ -103,7 +139,7 @@
                 url: "user/login.do",
                 method: "post",
                 cache: false,
-                data: $("#loginForm").serialize(),//表单序列化
+                data: $("#loginform").serialize(),//表单序列化
                 success: function (result) {
                     if (JSON.parse(result) == "success")
                         window.location.href = "admin.html";
@@ -119,6 +155,64 @@
             layer.tips("验证码输入有误!", "#vcode", {tips: [1, '#FF0000'], time: 3000});
             return;
         }
+    }
+
+    function signup() {
+        var signupname=$("#signupname").val();
+        if (signupname.length == 0) {
+            layer.tips("注册用户名不能为空!", "#signupname", {tips: [2, '#FF0000'], time: 3000});
+            return;
+        }
+        var email=$("#email").val();
+        if (email.length == 0) {
+            layer.tips("注册电子邮箱不能为空!", "#email", {tips: [2, '#FF0000'], time: 3000});
+            return;
+        }
+        if(!new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$").test(email)){
+            layer.tips("电子邮箱输入不正确!", "#email", {tips: [2, '#FF0000'], time: 3000});
+            return;
+        }
+        var signuppwd=$("#signuppwd").val();
+        if (signuppwd.length == 0) {
+            layer.tips("注册密码不能为空!", "#signuppwd", {tips: [2, '#FF0000'], time: 3000});
+            return;
+        }
+        if (signuppwd.length < 6) {
+            layer.tips("注册密码长度应大于6位!", "#signuppwd", {tips: [2, '#FF0000'], time: 3000});
+            return;
+        }
+        var signuppwd2=$("#signuppwd2").val();
+        if (signuppwd2.length == 0) {
+            layer.tips("重复密码不能为空!", "#signuppwd2", {tips: [2, '#FF0000'], time: 3000});
+            return;
+        }
+        if(signuppwd!=signuppwd2){
+            layer.tips("密码输入不一致!","#signuppwd2",{tips:[2,'#FF0000'],time:3000});
+            return;
+        }
+        $.ajax({
+            url: "user/signup.do",
+            method: "get",
+            cache: false,
+            data: $("#signupform").serialize(),//表单序列化
+            success: function (result) {
+                if (JSON.parse(result) == "success"){
+                    layer.msg("注册成功！", {icon: 1});
+                    window.location.href = "index.jsp";
+                } else {
+                    layer.msg("注册失败！", {icon: 2});
+                }
+            },
+            error: function (e) {
+                layer.msg("请求服务器失败！", {icon: 2});
+            }
+        });
+    }
+
+    function reset() {
+        $("#loginform,#signupform").find('input[type=text],input[type=password],input[type=email]').each(function () {
+            $(this).val('');
+        });
     }
 </script>
 </html>

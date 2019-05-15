@@ -14,18 +14,6 @@ import java.util.List;
 @Scope("prototype")
 @RequestMapping("/user")
 public class UserAction {
-    @RequestMapping(value = "/displayTest.do",method = RequestMethod.GET)
-    @ResponseBody
-    public List displayTest(){
-        System.out.println("action test");
-        List list=new ArrayList();
-        list.add("zhangsan");
-        list.add("lisi");
-        list.add("wangwu");
-        list.add("zhaoliu");
-        System.out.println(list.toString());
-        return list;
-    }
     @RequestMapping(value = "/login.do",method = RequestMethod.POST)
     @ResponseBody
     public String login(@RequestParam("uname") String uname,String upwd){
@@ -34,5 +22,11 @@ public class UserAction {
         }else {
             return "fails";
         }
+    }
+
+    @RequestMapping(value = "/signup.do",method = RequestMethod.GET)
+    @ResponseBody
+    public String signup(@RequestParam("signupname") String signupname,String email,String signuppwd){
+        return "success";
     }
 }
