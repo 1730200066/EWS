@@ -60,28 +60,28 @@
                         <div class="layui-card-body">
                             <form id="signupform">
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">用户名：<span style="color: red">*</span></label>
+                                    <label class="layui-form-label">用户名<span style="color: red">*</span>：</label>
                                     <div class="layui-input-block">
                                         <input type="text" id="signupname" name="signupname" required="required"
                                                placeholder="请输入用户名" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">电子邮件地址：<span style="color: red">*</span></label>
+                                    <label class="layui-form-label">电子邮件地址<span style="color: red">*</span>：</label>
                                     <div class="layui-input-block">
                                         <input type="email" id="email" name="email" required="required"
                                                placeholder="请输入电子邮件地址" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">密码：<span style="color: red">*</span></label>
+                                    <label class="layui-form-label">密码<span style="color: red">*</span>：</label>
                                     <div class="layui-input-block">
                                         <input type="password" id="signuppwd" name="signuppwd" required="required"
                                                placeholder="请输入您要设置的密码，不少于六位" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">重复密码：<span style="color: red">*</span></label>
+                                    <label class="layui-form-label">重复密码<span style="color: red">*</span>：</label>
                                     <div class="layui-input-block">
                                         <input type="password" id="signuppwd2" name="signuppwd2" required="required"
                                                placeholder="请重复您设置的密码" autocomplete="off" class="layui-input">
@@ -156,6 +156,15 @@
             return;
         }
     }
+    //input键盘捕捉enter
+    $("#uname,#upwd,#vcode").on("keydown",function (e) {
+       if(e.keyCode==13)
+           login();
+    });
+    $("#signupname,#email,#signuppwd,#signuppwd2").on("keydown",function (e) {
+       if(e.keyCode==13)
+           signup();
+    });
 
     function signup() {
         var signupname=$("#signupname").val();
