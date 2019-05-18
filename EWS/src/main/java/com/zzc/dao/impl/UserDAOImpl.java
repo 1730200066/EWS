@@ -24,4 +24,15 @@ public class UserDAOImpl implements IUserDAO {
         List<Map<String,String>> list = sqlSession.selectList(statement,map);
         return list;
     }
+    @Override
+    public int signup(String signupname,String email,String signuppwd){
+        SqlSession sqlSession=sqlSessionFactory.openSession(true);
+        String statement="com.zzc.mapping.userMapper.signup";
+        Map map=new HashMap();
+        map.put("signupname",signupname);
+        map.put("email",email);
+        map.put("signuppwd",signuppwd);
+        int i=sqlSession.insert(statement,map);
+        return i;
+    }
 }

@@ -18,4 +18,9 @@ public class UserServiceImpl implements IUserService {
         List<Map<String,String>> list=userDAOImpl.login(uname,upwd);
         return list;
     }
+    @Override
+    public int signup(String signupname,String email,String signuppwd){
+        int i=userDAOImpl.signup(signupname,email,signuppwd);
+        return i;
+    }
 }

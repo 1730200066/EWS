@@ -4,5 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface IUserService {
-    List<Map<String,String>> login(String uname, String upwd);
+    public List<Map<String,String>> login(String uname, String upwd);
+    public int signup(String signupname,String email,String signuppwd);
 }

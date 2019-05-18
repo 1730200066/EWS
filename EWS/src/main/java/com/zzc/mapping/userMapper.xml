@@ -5,7 +5,7 @@
     <select id="findUserByUnameAndUpwd" parameterType="map" resultType="map">
         select * from tb_user where uname=#{uname} and upwd=md5(#{upwd})
     </select>
-    <insert id="signup" parameterType="list">
-        insert into tb_user(uname,upwd,email) values(uname=#{uname},upwd=#{upwd},email=#{email})
+    <insert id="signup" parameterType="map">
+        insert into tb_user(uname,upwd,email) values(#{signupname},md5(#{signuppwd}),#{email})
     </insert>
 </mapper>

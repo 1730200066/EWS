@@ -32,7 +32,11 @@ public class UserAction {
     @RequestMapping(value = "/signup.do",method = RequestMethod.GET)
     @ResponseBody
     public String signup(@RequestParam("signupname") String signupname,String email,String signuppwd){
-
-        return "success";
+        int i=userServiceImpl.signup(signupname,email,signuppwd);
+        if(i>0){
+            return "success";
+        }else{
+            return "fails";
+        }
     }
 }
