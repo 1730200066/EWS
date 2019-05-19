@@ -74,6 +74,23 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
+                                    <label class="layui-form-label">职位<span style="color: red">*</span>：</label>
+                                    <div class="layui-input-inline">
+                                        <select id="role" name="role" required="required">
+                                            <option value="">请选择您的职位</option>
+                                            <optgroup label="普通员工">
+                                                <option value="职员">职员</option>
+                                            </optgroup>
+                                            <optgroup label="维修部">
+                                                <option value="检修员">检修员</option>
+                                            </optgroup>
+                                            <optgroup label="管理部">
+                                                <option value="后台管理员">后台管理员</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
                                     <label class="layui-form-label">密码<span style="color: red">*</span>：</label>
                                     <div class="layui-input-block">
                                         <input type="password" id="signuppwd" name="signuppwd" required="required"
@@ -86,6 +103,14 @@
                                         <input type="password" id="signuppwd2" name="signuppwd2" required="required"
                                                placeholder="请重复您设置的密码" autocomplete="off" class="layui-input">
                                     </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">验证码：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="vcode1" name="vcode1" required="required"
+                                               placeholder="请输入验证码" autocomplete="off" class="layui-input">
+                                    </div>
+                                    <div id="checkCode1" onclick="refreshVcode()"></div>
                                 </div>
                                 <div class="layui-form-item" align="center">
                                     <a class="layui-btn" href="javascript:signup()">注册</a>
@@ -125,7 +150,7 @@
             return;
         }
         if (upwd.length < 6) {
-            layer.tips("密码长度应大于6位!", "#upwd", {tips: [2, '#FF0000'], time: 3000});
+            layer.tips("密码长度至少6位!", "#upwd", {tips: [2, '#FF0000'], time: 3000});
             return;
         }
         var code=document.getElementById("checkCode").innerHTML;
@@ -144,7 +169,7 @@
                     if (JSON.parse(result) == "success")
                         window.location.href = "admin.html";
                     else {
-                        layer.msg("登录失败！", {icon: 2});
+                        layer.msg("用户名或密码错误！", {icon: 2});
                     }
                 },
                 error: function (e) {
@@ -187,7 +212,7 @@
             return;
         }
         if (signuppwd.length < 6) {
-            layer.tips("注册密码长度应大于6位!", "#signuppwd", {tips: [2, '#FF0000'], time: 3000});
+            layer.tips("注册密码长度至少6位!", "#signuppwd", {tips: [2, '#FF0000'], time: 3000});
             return;
         }
         var signuppwd2=$("#signuppwd2").val();
@@ -199,23 +224,32 @@
             layer.tips("密码输入不一致!","#signuppwd2",{tips:[2,'#FF0000'],time:3000});
             return;
         }
-        $.ajax({
-            url: "user/signup.do",
-            method: "get",
-            cache: false,
-            data: $("#signupform").serialize(),//表单序列化
-            success: function (result) {
-                if (JSON.parse(result) == "success"){
-                    layer.msg("注册成功！", {icon: 1});
-                    window.location.href = "index.jsp";
-                } else {
-                    layer.msg("注册失败！", {icon: 2});
+        var code1=document.getElementById("checkCode1").innerHTML;
+        var vcode1 = $("#vcode1").val();
+        if (vcode1.length == 0) {
+            layer.tips("验证码不能为空!", "#vcode1", {tips: [1, '#FF0000'], time: 3000});
+            return;
+        }
+        if(vcode1.toUpperCase()==code1.toUpperCase()){
+            $.ajax({
+                url: "user/signup.do",
+                method: "get",
+                cache: false,
+                data: $("#signupform").serialize(),//表单序列化
+                success: function (result) {
+                    if (JSON.parse(result) == "success"){
+                        layer.msg("注册成功！", {icon: 1});
+                        window.location.href = "index.jsp";
+                    } else {
+                        layer.msg("注册失败！", {icon: 2});
+                    }
+                },
+                error: function (e) {
+                    layer.msg("请求服务器失败！", {icon: 2});
                 }
-            },
-            error: function (e) {
-                layer.msg("请求服务器失败！", {icon: 2});
-            }
-        });
+            });
+        }
+
     }
 
     function reset() {

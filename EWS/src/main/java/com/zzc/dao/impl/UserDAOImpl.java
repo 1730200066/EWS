@@ -25,13 +25,14 @@ public class UserDAOImpl implements IUserDAO {
         return list;
     }
     @Override
-    public int signup(String signupname,String email,String signuppwd){
+    public int signup(String signupname,String email,String signuppwd,String role){
         SqlSession sqlSession=sqlSessionFactory.openSession(true);
         String statement="com.zzc.mapping.userMapper.signup";
         Map map=new HashMap();
         map.put("signupname",signupname);
         map.put("email",email);
         map.put("signuppwd",signuppwd);
+        map.put("role",role);
         int i=sqlSession.insert(statement,map);
         return i;
     }

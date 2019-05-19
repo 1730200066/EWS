@@ -19,8 +19,8 @@ public class UserServiceImpl implements IUserService {
         return list;
     }
     @Override
-    public int signup(String signupname,String email,String signuppwd){
-        int i=userDAOImpl.signup(signupname,email,signuppwd);
+    public int signup(String signupname,String email,String signuppwd,String role){
+        int i=userDAOImpl.signup(signupname,email,signuppwd,role);
         return i;
     }
 }
