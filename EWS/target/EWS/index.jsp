@@ -248,6 +248,9 @@
                     layer.msg("请求服务器失败！", {icon: 2});
                 }
             });
+        }else {
+            layer.tips("验证码输入有误!", "#vcode1", {tips: [1, '#FF0000'], time: 3000});
+            return;
         }
 
     }

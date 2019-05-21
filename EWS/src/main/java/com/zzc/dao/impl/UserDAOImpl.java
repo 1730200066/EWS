@@ -36,4 +36,21 @@ public class UserDAOImpl implements IUserDAO {
         int i=sqlSession.insert(statement,map);
         return i;
     }
+
+    @Override
+    public List<Map<String, String>> userList() {
+        SqlSession sqlSession=sqlSessionFactory.openSession(true);
+        String statement="com.zzc.mapping.userMapper.findUserAll";
+        List<Map<String,String>> list = sqlSession.selectList(statement);
+        return list;
+    }
+
+    @Override
+    public int userCount() {
+        SqlSession sqlSession=sqlSessionFactory.openSession(true);
+        String statement="com.zzc.mapping.userMapper.findCountUser";
+        int count=sqlSession.selectOne(statement);
+        return count;
+    }
+
 }

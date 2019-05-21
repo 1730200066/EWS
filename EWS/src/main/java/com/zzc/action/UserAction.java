@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class UserAction {
         }
     }
 
-    @RequestMapping(value = "/signup.do",method = RequestMethod.GET)
+    @RequestMapping(value = "/signup.do")
     @ResponseBody
     public String signup(@RequestParam("signupname") String signupname,String email,String signuppwd,String role){
         int i=userServiceImpl.signup(signupname,email,signuppwd,role);
@@ -37,6 +38,23 @@ public class UserAction {
             return "success";
         }else{
             return "fails";
+        }
+    }
+
+    @RequestMapping(value = "/userlist.do")
+    @ResponseBody
+    public Map<String,Object> searchUserList(){
+        List<Map<String,String>> list=userServiceImpl.userList();
+        if(list.size()>0){
+            int count=userServiceImpl.userCount();
+            Map map=new HashMap();
+            map.put("msg","");
+            map.put("code",0);
+            map.put("data",list);
+            map.put("count",count);
+            return map;
+        }else{
+            return null;
         }
     }
 }

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>人员名单</title>
+    <link rel="stylesheet" href="layui/css/layui.css"/>
+    <script type="text/javascript" src="jquery/jquery3.4.1.js"></script>
+    <script type="text/javascript" src="layui/layui.all.js"></script>
+</head>
+<body>
+<table class="layui-hide" id="userTable"></table>
+</body>
+<script type="text/javascript">
+    layui.use("table", function () {
+        layui.table.render({
+            elem: "#userTable",
+            url: 'user/userlist.do',
+            idField: 'id',
+            method: 'post',
+            cols: [[
+                {type: 'checkbox', sort: true},
+                {field: 'id', width: '40', title: 'ID', sort: true},
+                {field: 'uname', width: '100', title: '用户名', sort: true},
+                {field: 'role', width: '100', title: '职位', sort: true},
+                {field: 'registerTime', width: '160', title: '注册时间', sort: true},
+                {field: 'lastLoginTime', width: '160', title: '最后登录时间', sort: true}
+            ]],
+            page: true
+        });
+    })
+</script>
+</html>

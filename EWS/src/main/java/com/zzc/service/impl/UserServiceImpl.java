@@ -23,4 +23,14 @@ public class UserServiceImpl implements IUserService {
         int i=userDAOImpl.signup(signupname,email,signuppwd,role);
         return i;
     }
+
+    @Override
+    public List<Map<String, String>> userList() {
+        return userDAOImpl.userList();
+    }
+
+    @Override
+    public int userCount() {
+        return userDAOImpl.userCount();
+    }
 }

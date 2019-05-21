@@ -8,4 +8,10 @@
     <insert id="signup" parameterType="map">
         insert into tb_user(uname,upwd,email,role,registerTime) values(#{signupname},md5(#{signuppwd}),#{email},#{role},now())
     </insert>
+    <select id="findUserAll" resultType="map">
+        select * from tb_user
+    </select>
+    <select id="findCountUser" resultType="int">
+        select count(*) from tb_user
+    </select>
 </mapper>
