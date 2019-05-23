@@ -74,19 +74,13 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">职位<span style="color: red">*</span>：</label>
+                                    <label class="layui-form-label">部门<span style="color: red">*</span>：</label>
                                     <div class="layui-input-inline">
                                         <select id="role" name="role" required="required">
-                                            <option value="">请选择您的职位</option>
-                                            <optgroup label="普通员工">
-                                                <option value="职员">职员</option>
-                                            </optgroup>
-                                            <optgroup label="维修部">
-                                                <option value="检修员">检修员</option>
-                                            </optgroup>
-                                            <optgroup label="管理部">
-                                                <option value="后台管理员">后台管理员</option>
-                                            </optgroup>
+                                            <option value="">请选择您的部门</option>
+                                                <option value="职员">检修部</option>
+                                                <option value="外科">外科</option>
+                                                <option value="牙科">牙科</option>
                                         </select>
                                     </div>
                                 </div>

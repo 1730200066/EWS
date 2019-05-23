@@ -1,0 +1,34 @@
+create database hospitaldb;
+use hospitaldb;
+
+create table department(
+id int UNSIGNED auto_increment not null primary key,
+dname varchar(20) not null unique)
+
+create table employee(
+id bigint UNSIGNED auto_increment not null primary key,
+ename varchar(20) not null unique,
+upwd varchar(20) not null unique,
+true_name varchar(20),
+sex varchar(5) unique DEFAULT 'ÄÐ',
+phone_number varchar(20),
+email varchar(30),
+date_of_birth varchar(30),
+department varchar(20) unique,
+foreign key(department) references department(dname))
+
+create table supplier(
+id int UNSIGNED auto_increment not null primary key,
+sname varchar(20) not null unique,
+business_licence varchar(30) not null unique,
+business_certificate varchar(30) not null unique)
+
+create table device(
+id bigint UNSIGNED auto_increment not null primary key,
+dname varchar(20) not null unique,
+start_work_date varchar(30) unique,
+work_time varchar(20),
+message_of_repair varchar(1024),
+device_status varchar(20) unique,
+supplier varchar(20) unique,
+foreign key(supplier) references supplier(sname))
