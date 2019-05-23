@@ -6,7 +6,7 @@
         select * from employee where ename=#{uname} and upwd=#{upwd}
     </select>
     <insert id="signup" parameterType="map">
-        insert into employee(ename,upwd,email,department) values(#{signupname},md5(#{signuppwd}),#{email},#{role})
+        insert into employee(ename,upwd,email,department) values(#{signupname},#{signuppwd},#{email},#{role})
     </insert>
     <select id="findUserAll" resultType="map">
         select * from employee

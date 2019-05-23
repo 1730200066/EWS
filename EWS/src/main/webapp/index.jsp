@@ -48,6 +48,8 @@
                                     <div id="checkCode" onclick="refreshVcode()"></div>
                                 </div>
                                 <div class="layui-form-item" align="center">
+                                    <input type="checkbox" lay-skin="primary" name="savePassword" id="savePassword" onclick="savePassword()">
+                                    <label>remenber me</label><br/>
                                     <a class="layui-btn" href="javascript:login()">登录</a>
                                     <a class="layui-btn layui-btn-normal" href="javascript:reset()">重置</a>
                                 </div>
@@ -78,7 +80,7 @@
                                     <div class="layui-input-inline">
                                         <select id="role" name="role" required="required">
                                             <option value="">请选择您的部门</option>
-                                                <option value="职员">检修部</option>
+                                                <option value="检修部">检修部</option>
                                                 <option value="外科">外科</option>
                                                 <option value="牙科">牙科</option>
                                         </select>
@@ -175,12 +177,24 @@
             return;
         }
     }
+    function savePassword()
+    {
+        if(document.getElementById("savePassword").checked) {
+            var username = $("#uname").val();
+            var password = $("#upwd").val();
+            window.sessionStorage.username =  username;
+            window.sessionStorage.password = password;
+            localStorage.rmbPassword = true;
+        }else {
+            localStorage.rmbPassword = false;
+        }
+    }
     //input键盘捕捉enter
     $("#uname,#upwd,#vcode").on("keydown",function (e) {
        if(e.keyCode==13)
            login();
     });
-    $("#signupname,#email,#signuppwd,#signuppwd2").on("keydown",function (e) {
+    $("#signupname,#email,#signuppwd,#signuppwd2,#vcode1").on("keydown",function (e) {
        if(e.keyCode==13)
            signup();
     });
