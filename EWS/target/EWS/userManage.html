@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户信息管理</title>
+    <link rel="stylesheet" href="layui/css/layui.css"/>
+    <script type="text/javascript" src="jquery/jquery3.4.1.js"></script>
+    <script type="text/javascript" src="layui/layui.all.js"></script>
+</head>
+<body>
+<blockquote class="layui-elem-quote">
+    用户信息管理
+</blockquote>
+<table class="layui-table" id="userTable"></table>
+</body>
+<script id="tb1_tools" type="text/html">
+    <a href="" class="layui-btn layui-btn-danger">
+        <span class="layui-icon layui-icon-add-1"></span> 添加用户
+    </a>
+    <a href="" class="layui-btn layui-btn-danger">
+        <span class="layui-icon layui-icon-delete"></span> 删除用户
+    </a>
+    <div class="layui-inline">
+        <input id="tool_uname" class="layui-input-block" placeholder="请输入用户名"/>
+        <a href="" class="layui-btn layui-btn-danger">
+            <span class="layui-icon layui-icon-search"></span> 搜索
+        </a>
+        <a href="" class="layui-btn layui-btn-danger">
+            <span class="layui-icon layui-icon-refresh"></span> 搜索
+        </a>
+    </div>
+</script>
+<script type="text/javascript">
+    $(function () {
+        findAllUserList();
+    });
+    function findAllUserList() {
+        layui.table.render({
+            elem: '#userTable',
+            url: 'user/userlist.do',
+            title:'用户信息列表',
+            idField: 'id',
+            toolbar:'#tb1_tools',
+            method: 'post',
+            limit:5,
+            loading:true,
+            limits:[5,10,20,50],
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', title: 'ID', sort: true},
+                {field: 'ename', title: '用户名', sort: true},
+                {field: 'true_name', title: '真实名字', sort: true},
+                {field: 'sex', title: '性别', sort: true},
+                {field: 'phone_number', title: '电话', sort: true},
+                {field: 'email', title: '电子邮箱', sort: true},
+                {field: 'date_of_birth', title: '出生日期', sort: true},
+                {field: 'department', title: '部门', sort: true},
+                {
+                    field:'id',
+                    title:'操作',
+                    templet:function (row) {
+                        var del="<a href='' title='删除'><span style='font-size: 25px;color: #FF0000' class='layui-icon layui-icon-delete'></span>";
+                        var update="<a href='' title='更新'><span style='font-size: 25px;color: #0000FF' class='layui-icon layui-icon-edit'></span>";
+                        return del+'<span style="color: gray;font-size: 30px">|</span>'+update;
+                    }
+                }
+            ]],
+            page: true
+        });
+    }
+</script>
+</html>
