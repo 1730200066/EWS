@@ -48,8 +48,9 @@
                                     <div id="checkCode" onclick="refreshVcode()"></div>
                                 </div>
                                 <div class="layui-form-item" align="center">
-                                    <input type="checkbox" lay-skin="primary" name="savePassword" id="savePassword" onclick="savePassword()">
-                                    <label>remenber me</label><br/>
+                                    <input type="checkbox" id="save" onclick="savePassword();"/>
+                                    <label>remenber me</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label><a href="retrievePassword.html">忘记密码？</a></label><br/>
                                     <a class="layui-btn" href="javascript:login()">登录</a>
                                     <a class="layui-btn layui-btn-normal" href="javascript:reset()">重置</a>
                                 </div>
@@ -80,9 +81,9 @@
                                     <div class="layui-input-inline">
                                         <select id="role" name="role" required="required">
                                             <option value="">请选择您的部门</option>
-                                                <option value="检修部">检修部</option>
-                                                <option value="外科">外科</option>
-                                                <option value="牙科">牙科</option>
+                                            <option value="检修部">检修部</option>
+                                            <option value="外科">外科</option>
+                                            <option value="牙科">牙科</option>
                                         </select>
                                     </div>
                                 </div>
@@ -149,7 +150,7 @@
             layer.tips("密码长度至少6位!", "#upwd", {tips: [2, '#FF0000'], time: 3000});
             return;
         }
-        var code=document.getElementById("checkCode").innerHTML;
+        var code = document.getElementById("checkCode").innerHTML;
         var vcode = $("#vcode").val();
         if (vcode.length == 0) {
             layer.tips("验证码不能为空!", "#vcode", {tips: [1, '#FF0000'], time: 3000});
@@ -177,44 +178,44 @@
             return;
         }
     }
-    function savePassword()
-    {
-        if(document.getElementById("savePassword").checked) {
+
+    function savePassword() {
+        if (document.getElementById("save").checked) {
             var username = $("#uname").val();
             var password = $("#upwd").val();
-            window.sessionStorage.username =  username;
+            window.sessionStorage.username = username;
             window.sessionStorage.password = password;
             localStorage.rmbPassword = true;
-        }else {
+        } else {
             localStorage.rmbPassword = false;
         }
     }
     //input键盘捕捉enter
-    $("#uname,#upwd,#vcode").on("keydown",function (e) {
-       if(e.keyCode==13)
-           login();
+    $("#uname,#upwd,#vcode").on("keydown", function (e) {
+        if (e.keyCode == 13)
+            login();
     });
-    $("#signupname,#email,#signuppwd,#signuppwd2,#vcode1").on("keydown",function (e) {
-       if(e.keyCode==13)
-           signup();
+    $("#signupname,#email,#signuppwd,#signuppwd2,#vcode1").on("keydown", function (e) {
+        if (e.keyCode == 13)
+            signup();
     });
 
     function signup() {
-        var signupname=$("#signupname").val();
+        var signupname = $("#signupname").val();
         if (signupname.length == 0) {
             layer.tips("注册用户名不能为空!", "#signupname", {tips: [2, '#FF0000'], time: 3000});
             return;
         }
-        var email=$("#email").val();
+        var email = $("#email").val();
         if (email.length == 0) {
             layer.tips("注册电子邮箱不能为空!", "#email", {tips: [2, '#FF0000'], time: 3000});
             return;
         }
-        if(!new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$").test(email)){
+        if (!new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$").test(email)) {
             layer.tips("电子邮箱输入不正确!", "#email", {tips: [2, '#FF0000'], time: 3000});
             return;
         }
-        var signuppwd=$("#signuppwd").val();
+        var signuppwd = $("#signuppwd").val();
         if (signuppwd.length == 0) {
             layer.tips("注册密码不能为空!", "#signuppwd", {tips: [2, '#FF0000'], time: 3000});
             return;
@@ -223,29 +224,29 @@
             layer.tips("注册密码长度至少6位!", "#signuppwd", {tips: [2, '#FF0000'], time: 3000});
             return;
         }
-        var signuppwd2=$("#signuppwd2").val();
+        var signuppwd2 = $("#signuppwd2").val();
         if (signuppwd2.length == 0) {
             layer.tips("重复密码不能为空!", "#signuppwd2", {tips: [2, '#FF0000'], time: 3000});
             return;
         }
-        if(signuppwd!=signuppwd2){
-            layer.tips("密码输入不一致!","#signuppwd2",{tips:[2,'#FF0000'],time:3000});
+        if (signuppwd != signuppwd2) {
+            layer.tips("密码输入不一致!", "#signuppwd2", {tips: [2, '#FF0000'], time: 3000});
             return;
         }
-        var code1=document.getElementById("checkCode1").innerHTML;
+        var code1 = document.getElementById("checkCode1").innerHTML;
         var vcode1 = $("#vcode1").val();
         if (vcode1.length == 0) {
             layer.tips("验证码不能为空!", "#vcode1", {tips: [1, '#FF0000'], time: 3000});
             return;
         }
-        if(vcode1.toUpperCase()==code1.toUpperCase()){
+        if (vcode1.toUpperCase() == code1.toUpperCase()) {
             $.ajax({
                 url: "user/signup.do",
                 method: "get",
                 cache: false,
                 data: $("#signupform").serialize(),//表单序列化
                 success: function (result) {
-                    if (JSON.parse(result) == "success"){
+                    if (JSON.parse(result) == "success") {
                         layer.msg("注册成功！", {icon: 1});
                         window.location.href = "index.jsp";
                     } else {
@@ -256,7 +257,7 @@
                     layer.msg("请求服务器失败！", {icon: 2});
                 }
             });
-        }else {
+        } else {
             layer.tips("验证码输入有误!", "#vcode1", {tips: [1, '#FF0000'], time: 3000});
             return;
         }

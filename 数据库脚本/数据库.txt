@@ -8,12 +8,12 @@ dname varchar(20) not null primary key)
 create table employee(
 id bigint UNSIGNED auto_increment not null primary key,
 ename varchar(20) not null unique,
-upwd varchar(20) not null,
-true_name varchar(20),
+upwd varchar(20) not null default '123456',
+true_name varchar(20) default null,
 sex varchar(5) DEFAULT 'ÄÐ',
-phone_number varchar(20),
-email varchar(30),
-date_of_birth varchar(30),
+phone_number varchar(20) default null,
+email varchar(30) default null,
+date_of_birth varchar(30) default null,
 department varchar(20),
 foreign key(department) references department(dname))
 

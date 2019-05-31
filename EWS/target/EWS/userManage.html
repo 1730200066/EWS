@@ -4,46 +4,130 @@
     <meta charset="UTF-8">
     <title>用户信息管理</title>
     <link rel="stylesheet" href="layui/css/layui.css"/>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"/>
     <script type="text/javascript" src="jquery/jquery3.4.1.js"></script>
     <script type="text/javascript" src="layui/layui.all.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+    <style>
+        .modal-backdrop{
+            z-index: 0;
+        }
+    </style>
 </head>
 <body>
 <blockquote class="layui-elem-quote">
     用户信息管理
 </blockquote>
 <table class="layui-table" id="userTable"></table>
+<!--div隐藏效果，data-target="#mainModal"会触发隐藏的div显示为模态框的效果-->
+<div class="modal fade" id="mainModal" tabindex="-1" role="dialog" aria-hidden="true"
+     style="margin-top: 100px;">
+    <div class="modal-backdrop in"></div>
+    <!--    模态对话框悬浮效果-->
+    <div class="modal-dialog">
+        <!--        模态框的主体内容-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">用户添加</h4>
+            </div>
+            <div class="modal-body">
+                <form action="#" class="form-horizontal" id="userForm">
+                    <!--                    用户名-->
+                    <div class="form-group">
+                        <label class="control-label col-md-4">用户名<span style="color: red;">*</span> ：</label>
+                        <div class="col-md-6 col-xs-11">
+                            <input class="form-control" name="ename" id="ename" size="16" type="text" value="" />
+                        </div>
+                    </div>
+                    <!--                    真实名字-->
+                    <div class="form-group">
+                        <label class="control-label col-md-4">真实名字：</label>
+                        <div class="col-md-6 col-xs-11">
+                            <input class="form-control" name="true_name" id="true_name" size="16" type="text" value="" />
+                        </div>
+                    </div>
+                    <!--                    性别-->
+                    <div class="form-group">
+                        <label class="control-label col-md-4">性别：</label>
+                        <div class="col-md-6 col-xs-11">
+                            <select class="form-control input-sm" name="sex" id="sex">
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--                    电话-->
+                    <div class="form-group">
+                        <label class="control-label col-md-4">电话：</label>
+                        <div class="col-md-6 col-xs-11">
+                            <input class="form-control" name="phone_number" id="phone_number" size="16" type="tel" value="" />
+                        </div>
+                    </div>
+                    <!--                    邮箱-->
+                    <div class="form-group">
+                        <label class="control-label col-md-4">邮箱：</label>
+                        <div class="col-md-6 col-xs-11">
+                            <input class="form-control" name="email" id="email" size="16" type="email" value="" />
+                        </div>
+                    </div>
+                    <!--                    出生日期-->
+                    <div class="form-group">
+                        <label class="control-label col-md-4">出生日期：</label>
+                        <div class="col-md-6 col-xs-11">
+                            <input class="form-control" name="date_of_birth" id="date_of_birth" size="16" type="text" value="" />
+                        </div>
+                    </div>
+                    <!--                    所属部门-->
+                    <div class="form-group">
+                        <label class="control-label col-md-4">所属部门：</label>
+                        <div class="col-md-6 col-xs-11">
+                            <select class="form-control input-sm" name="department" id="department">
+                                <option value="检修部">检修部</option>
+                                <option value="外科">外科</option>
+                                <option value="牙科">牙科</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--            页脚-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="insertButton" onclick="submitUser()">Submit</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 <script id="tb1_tools" type="text/html">
-    <a href="" class="layui-btn layui-btn-danger">
+    <button class="layui-btn layui-btn-danger" data-toggle="modal" data-target="#mainModal">
         <span class="layui-icon layui-icon-add-1"></span> 添加用户
-    </a>
-    <a href="" class="layui-btn layui-btn-danger">
-        <span class="layui-icon layui-icon-delete"></span> 删除用户
-    </a>
+    </button>
+    <button class="layui-btn layui-btn-danger">
+        <span class="layui-icon layui-icon-delete"></span> 批量删除
+    </button>
     <div class="layui-inline">
         <input id="tool_uname" class="layui-input-block" placeholder="请输入用户名"/>
         <a href="" class="layui-btn layui-btn-danger">
             <span class="layui-icon layui-icon-search"></span> 搜索
         </a>
         <a href="" class="layui-btn layui-btn-danger">
-            <span class="layui-icon layui-icon-refresh"></span> 搜索
+            <span class="layui-icon layui-icon-refresh"></span> 刷新
         </a>
     </div>
 </script>
 <script type="text/javascript">
-    $(function () {
-        findAllUserList();
-    });
-    function findAllUserList() {
+    layui.use('table',function() {
         layui.table.render({
             elem: '#userTable',
             url: 'user/userlist.do',
             title:'用户信息列表',
-            idField: 'id',
+            id: 'userTable',
             toolbar:'#tb1_tools',
             method: 'post',
+            page: true,
             limit:5,
-            loading:true,
             limits:[5,10,20,50],
             cols: [[
                 {type: 'checkbox'},
@@ -59,13 +143,60 @@
                     field:'id',
                     title:'操作',
                     templet:function (row) {
-                        var del="<a href='' title='删除'><span style='font-size: 25px;color: #FF0000' class='layui-icon layui-icon-delete'></span>";
-                        var update="<a href='' title='更新'><span style='font-size: 25px;color: #0000FF' class='layui-icon layui-icon-edit'></span>";
+                        var del="<a href='javaScript:deleteUserInfoById("+row.id+")' title='删除'><span style='font-size: 25px;color: #FF0000;' class='layui-icon layui-icon-delete'></span>";
+                        var update="<a href='' title='更新'><span style='font-size: 25px;color: #0000FF;' class='layui-icon layui-icon-edit'></span>";
                         return del+'<span style="color: gray;font-size: 30px">|</span>'+update;
                     }
                 }
-            ]],
-            page: true
+            ]]
+        });
+    });
+    // 添加用户button点击事件
+    function submitUser() {
+        $.ajax({
+            url:'user/insertUser.do',
+            cache: false,
+            method:'post',
+            data: $("#userForm").serialize(),//表单序列化
+            success:function (result) {
+                if(JSON.parse(result)=="success"){
+                    layer.msg("添加用户成功！");
+                    //刷新table
+                    layer.table.reload("userTable");
+                    //关闭模态框
+                    $("#mainModal").modal("hide");
+                }else
+                    layer.msg("操作失败！", {icon: 2});
+            },
+            error:function () {
+                layer.msg("连接服务器失败！", {icon: 2});
+            }
+        });
+    }
+    //添加用户单个删除函数
+    function deleteUserInfoById(id) {
+        //提示是否删除
+        layer.confirm("是否删除该用户?",{icon:3,title:"警告"},function () {
+            //数据在table中layui删除，而不等于数据库删除
+            layer.closeAll();
+            //异步删除db数据
+            $.ajax({
+                url:'user/deleteUserById.do',
+                data:{"id":id},
+                method:'post',
+                success:function (data) {
+                    if (JSON.parse(data)=="success"){
+                        layer.msg("删除users成功");
+                        //刷新table
+                        layer.table.reload("userTable");
+                    } else{
+                        alert("删除失败");
+                    }
+                },
+                error:function () {
+                    alert("erro");
+                }
+            });
         });
     }
 </script>
