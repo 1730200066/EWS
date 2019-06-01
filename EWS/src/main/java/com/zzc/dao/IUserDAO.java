@@ -9,9 +9,9 @@ public interface IUserDAO {
     //新用户注册
     public int signup(String signupname,String email,String signuppwd,String role);
     //查询员工表单信息
-    public List<Map<String,String>> userList();
+    public List<Map<String,String>> userList(Map map);
     //查询员工表单数量，做分页
-    public int userCount();
+    public List<Map<String,String>> userCount();
     //老用户按email找回密码
     public List<Map<String,String>> retrieve(String email);
     //管理员添加用户

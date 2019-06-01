@@ -27,12 +27,12 @@ public class UserServiceImpl implements IUserService {
     }
     //查询员工表单信息
     @Override
-    public List<Map<String, String>> userList() {
-        return userDAOImpl.userList();
+    public List<Map<String, String>> userList(Map map) {
+        return userDAOImpl.userList(map);
     }
     //查询员工表单数量，做分页
     @Override
-    public int userCount() {
+    public List<Map<String,String>> userCount() {
         return userDAOImpl.userCount();
     }
     //老用户按email找回密码

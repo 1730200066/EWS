@@ -11,12 +11,18 @@
         insert into employee(ename,upwd,email,department) values(#{signupname},#{signuppwd},#{email},#{role})
     </insert>
 <!--    查询员工表单信息-->
-    <select id="findUserAll" resultType="map">
+    <select id="findUserAll" parameterType="map" resultType="map">
         select * from employee
+        <where>
+            <if test="ename!=null">
+                and ename like concat("%",concat(#{ename},"%"))
+            </if>
+        </where>
+        limit #{recordIndex},#{pagesize}
     </select>
 <!--    查询员工表单数量，做分页-->
-    <select id="findCountUser" resultType="int">
-        select count(*) as 'count' from employee
+    <select id="findCountUser" resultType="map">
+        select count(*) as `count` from employee
     </select>
 <!--    老用户按email找回密码-->
     <select id="findEmail" resultType="map">

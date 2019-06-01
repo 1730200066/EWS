@@ -40,18 +40,18 @@ public class UserDAOImpl implements IUserDAO {
     }
     //查询员工表单信息
     @Override
-    public List<Map<String, String>> userList() {
+    public List<Map<String, String>> userList(Map map) {
         SqlSession sqlSession=sqlSessionFactory.openSession(true);
         String statement="com.zzc.mapping.userMapper.findUserAll";
-        List<Map<String,String>> list = sqlSession.selectList(statement);
+        List<Map<String,String>> list = sqlSession.selectList(statement,map);
         return list;
     }
     //查询员工表单数量，做分页
     @Override
-    public int userCount() {
+    public List<Map<String,String>> userCount() {
         SqlSession sqlSession=sqlSessionFactory.openSession(true);
         String statement="com.zzc.mapping.userMapper.findCountUser";
-        int count=sqlSession.selectOne(statement);
+        List<Map<String,String>> count=sqlSession.selectList(statement);
         return count;
     }
     //老用户按email找回密码
