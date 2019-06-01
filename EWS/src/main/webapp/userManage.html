@@ -19,7 +19,7 @@
     用户信息管理
 </blockquote>
 <table class="layui-table" id="userTable"></table>
-<!--div隐藏效果，data-target="#mainModal"会触发隐藏的div显示为模态框的效果-->
+<!--添加用户的模态框-->
 <div class="modal fade" id="mainModal" tabindex="-1" role="dialog" aria-hidden="true"
      style="margin-top: 100px;">
     <div class="modal-backdrop in"></div>
@@ -99,6 +99,86 @@
         </div>
     </div>
 </div>
+<!--修改用户的模态框-->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-hidden="true"
+     style="margin-top: 100px;">
+    <div class="modal-backdrop in"></div>
+    <!--    模态对话框悬浮效果-->
+    <div class="modal-dialog">
+        <!--        模态框的主体内容-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">修改id为<span id="getRowId"></span>的用户</h4>
+            </div>
+            <div class="modal-body">
+                <form action="#" class="form-horizontal" id="updateUserForm">
+                    <!--                    用户名-->
+                    <div class="form-group">
+                        <label class="control-label col-md-4">用户名<span style="color: red;">*</span> ：</label>
+                        <div class="col-md-6 col-xs-11">
+                            <input class="form-control" name="enameUpdate" id="enameUpdate" size="16" type="text" value="" />
+                        </div>
+                    </div>
+                    <!--                    真实名字-->
+                    <div class="form-group">
+                        <label class="control-label col-md-4">真实名字：</label>
+                        <div class="col-md-6 col-xs-11">
+                            <input class="form-control" name="true_nameUpdate" id="true_nameUpdate" size="16" type="text" value="" />
+                        </div>
+                    </div>
+                    <!--                    性别-->
+                    <div class="form-group">
+                        <label class="control-label col-md-4">性别：</label>
+                        <div class="col-md-6 col-xs-11">
+                            <select class="form-control input-sm" name="sexUpdate" id="sexUpdate">
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--                    电话-->
+                    <div class="form-group">
+                        <label class="control-label col-md-4">电话：</label>
+                        <div class="col-md-6 col-xs-11">
+                            <input class="form-control" name="phone_numberUpdate" id="phone_numberUpdate" size="16" type="tel" value="" />
+                        </div>
+                    </div>
+                    <!--                    邮箱-->
+                    <div class="form-group">
+                        <label class="control-label col-md-4">邮箱：</label>
+                        <div class="col-md-6 col-xs-11">
+                            <input class="form-control" name="emailUpdate" id="emailUpdate" size="16" type="email" value="" />
+                        </div>
+                    </div>
+                    <!--                    出生日期-->
+                    <div class="form-group">
+                        <label class="control-label col-md-4">出生日期：</label>
+                        <div class="col-md-6 col-xs-11">
+                            <input class="form-control" name="date_of_birthUpdate" id="date_of_birthUpdate" size="16" type="text" value="" />
+                        </div>
+                    </div>
+                    <!--                    所属部门-->
+                    <div class="form-group">
+                        <label class="control-label col-md-4">所属部门：</label>
+                        <div class="col-md-6 col-xs-11">
+                            <select class="form-control input-sm" name="departmentUpdate" id="departmentUpdate">
+                                <option value="检修部">检修部</option>
+                                <option value="外科">外科</option>
+                                <option value="牙科">牙科</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--            页脚-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="updateButton" onclick="updateUser()">Submit</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 <script id="tb1_tools" type="text/html">
     <button class="layui-btn layui-btn-danger" data-toggle="modal" data-target="#mainModal">
@@ -112,7 +192,7 @@
         <a href="" class="layui-btn layui-btn-danger">
             <span class="layui-icon layui-icon-search"></span> 搜索
         </a>
-        <a href="" class="layui-btn layui-btn-danger">
+        <a href="javascript:;" class="layui-btn layui-btn-danger">
             <span class="layui-icon layui-icon-refresh"></span> 刷新
         </a>
     </div>
@@ -143,13 +223,20 @@
                     field:'id',
                     title:'操作',
                     templet:function (row) {
-                        var del="<a href='javaScript:deleteUserInfoById("+row.id+")' title='删除'><span style='font-size: 25px;color: #FF0000;' class='layui-icon layui-icon-delete'></span>";
-                        var update="<a href='' title='更新'><span style='font-size: 25px;color: #0000FF;' class='layui-icon layui-icon-edit'></span>";
+                        var del="<a href='javaScript:deleteUserInfoById("+row.id+")' title='删除'><span style='font-size: 25px;color: #FF0000;' class='layui-icon layui-icon-delete'></span></a>";
+                        var update="<button data-toggle='modal' data-target='#updateModal' title='更新' onclick='getRowId("+row.id+")'><span style='font-size: 25px;color: #0000FF;' class='layui-icon layui-icon-edit'></span></button>";
                         return del+'<span style="color: gray;font-size: 30px">|</span>'+update;
                     }
                 }
             ]]
         });
+    });
+    //打开前重置模态框表单数据
+    $('#mainModal').on('show.bs.modal',function () {
+       $('#userForm')[0].reset();
+    });
+    $('#updateModal').on('show.bs.modal',function () {
+        $('#updateUserForm')[0].reset();
     });
     // 添加用户button点击事件
     function submitUser() {
@@ -162,7 +249,7 @@
                 if(JSON.parse(result)=="success"){
                     layer.msg("添加用户成功！");
                     //刷新table
-                    layer.table.reload("userTable");
+                    layui.table.reload("userTable");
                     //关闭模态框
                     $("#mainModal").modal("hide");
                 }else
@@ -184,19 +271,55 @@
                 url:'user/deleteUserById.do',
                 data:{"id":id},
                 method:'post',
-                success:function (data) {
-                    if (JSON.parse(data)=="success"){
+                success:function (result) {
+                    if (JSON.parse(result)=="success"){
                         layer.msg("删除users成功");
                         //刷新table
-                        layer.table.reload("userTable");
+                        layui.table.reload("userTable");
                     } else{
-                        alert("删除失败");
+                        layer.msg("删除失败！", {icon: 2});
                     }
                 },
                 error:function () {
-                    alert("erro");
+                    layer.msg("连接服务器失败！", {icon: 2});
                 }
             });
+        });
+    }
+    //取table表中的row.id赋值给修改用户的模态框以备使用
+    function getRowId(id) {
+        $('#getRowId').html(id);
+    }
+    //添加修改用户函数
+    //String ename, String true_name, String sex, String phone_number, String email, String date_of_birth, String department
+    function updateUser() {
+        $.ajax({
+            url:'user/updateUser.do',
+            method:'post',
+            cache: false,
+            data:{
+                "id":$('#getRowId').text(),
+                "ename":$('#enameUpdate').val(),
+                "true_name":$('#true_nameUpdate').val(),
+                "sex":$('#sexUpdate').val(),
+                "phone_number":$('#phone_numberUpdate').val(),
+                "email":$('#emailUpdate').val(),
+                "date_of_birth":$('#date_of_birthUpdate').val(),
+                "department":$('#departmentUpdate').val()
+            },
+            success:function (result) {
+                if (JSON.parse(result)=="success"){
+                    layer.msg("修改users成功");
+                    //刷新table
+                    layui.table.reload("userTable");
+                    $("#updateModal").modal("hide");
+                } else{
+                    layer.msg("修改失败",{icon: 2});
+                }
+            },
+            error:function () {
+                layer.msg("连接服务器失败！", {icon: 2});
+            }
         });
     }
 </script>

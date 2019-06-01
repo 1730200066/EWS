@@ -13,16 +13,16 @@
 <!--    查询员工表单信息-->
     <select id="findUserAll" parameterType="map" resultType="map">
         select * from employee
-        <where>
+        <!--<where>
             <if test="ename!=null">
                 and ename like concat("%",concat(#{ename},"%"))
             </if>
-        </where>
+        </where>-->
         limit #{recordIndex},#{pagesize}
     </select>
 <!--    查询员工表单数量，做分页-->
-    <select id="findCountUser" resultType="map">
-        select count(*) as `count` from employee
+    <select id="findCountUser" resultType="int">
+        select count(*) from employee
     </select>
 <!--    老用户按email找回密码-->
     <select id="findEmail" resultType="map">
@@ -37,4 +37,10 @@
     <delete id="deleteUserById" parameterType="int">
         delete from employee where id=#{id}
     </delete>
+<!--    管理员更新用户-->
+    <update id="updateUser" parameterType="map">
+        update employee set ename=#{ename},true_name=#{true_name},sex=#{sex},
+        phone_number=#{phone_number},email=#{email},date_of_birth=#{date_of_birth},department=#{department}
+        where id=#{id}
+    </update>
 </mapper>

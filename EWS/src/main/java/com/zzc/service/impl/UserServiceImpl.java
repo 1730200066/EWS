@@ -32,7 +32,7 @@ public class UserServiceImpl implements IUserService {
     }
     //查询员工表单数量，做分页
     @Override
-    public List<Map<String,String>> userCount() {
+    public int userCount() {
         return userDAOImpl.userCount();
     }
     //老用户按email找回密码
@@ -49,5 +49,10 @@ public class UserServiceImpl implements IUserService {
     @Override
     public int deleteUserById(int id) {
         return userDAOImpl.deleteUserById(id);
+    }
+    //管理员更新用户
+    @Override
+    public int updateUser(int id,String ename, String true_name, String sex, String phone_number, String email, String date_of_birth, String department) {
+        return userDAOImpl.updateUser(id,ename,true_name,sex,phone_number,email,date_of_birth,department);
     }
 }

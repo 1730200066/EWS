@@ -48,10 +48,10 @@ public class UserDAOImpl implements IUserDAO {
     }
     //查询员工表单数量，做分页
     @Override
-    public List<Map<String,String>> userCount() {
+    public int userCount() {
         SqlSession sqlSession=sqlSessionFactory.openSession(true);
         String statement="com.zzc.mapping.userMapper.findCountUser";
-        List<Map<String,String>> count=sqlSession.selectList(statement);
+        int count=sqlSession.selectOne(statement);
         return count;
     }
     //老用户按email找回密码
@@ -83,12 +83,27 @@ public class UserDAOImpl implements IUserDAO {
     //根据id单个删除用户
     @Override
     public int deleteUserById(int id) {
-        System.out.println(id);
         SqlSession sqlSession=sqlSessionFactory.openSession(true);
         String statement="com.zzc.mapping.userMapper.deleteUserById";
         int i=sqlSession.delete(statement,id);
         return i;
     }
-
+    //管理员更新用户
+    @Override
+    public int updateUser(int id,String ename, String true_name, String sex, String phone_number, String email, String date_of_birth, String department) {
+        SqlSession sqlSession=sqlSessionFactory.openSession(true);
+        String statement="com.zzc.mapping.userMapper.updateUser";
+        Map map=new HashMap();
+        map.put("id",id);
+        map.put("ename",ename);
+        map.put("true_name",true_name);
+        map.put("sex",sex);
+        map.put("phone_number",phone_number);
+        map.put("email",email);
+        map.put("date_of_birth",date_of_birth);
+        map.put("department",department);
+        int i=sqlSession.update(statement,map);
+        return i;
+    }
 
 }
