@@ -8,16 +8,16 @@
     </select>
 <!--    新用户注册-->
     <insert id="signup" parameterType="map">
-        insert into employee(ename,upwd,email,department) values(#{signupname},#{signuppwd},#{email},#{role})
+        insert into employee(ename,upwd,email,department,register_time) values(#{signupname},#{signuppwd},#{email},#{role},CURRENT_TIMESTAMP)
     </insert>
 <!--    查询员工表单信息-->
     <select id="findUserAll" parameterType="map" resultType="map">
         select * from employee
-        <!--<where>
+        <where>
             <if test="ename!=null">
                 and ename like concat("%",concat(#{ename},"%"))
             </if>
-        </where>-->
+        </where>
         limit #{recordIndex},#{pagesize}
     </select>
 <!--    查询员工表单数量，做分页-->
@@ -33,9 +33,12 @@
         insert into employee(ename,true_name,sex,phone_number,email,date_of_birth,department)
         values(#{ename},#{true_name},#{sex},#{phone_number},#{email},#{date_of_birth},#{department})
     </insert>
-<!--    根据id单个删除用户-->
-    <delete id="deleteUserById" parameterType="int">
+<!--    根据id删除用户-->
+    <delete id="deleteUserById" parameterType="String">
         delete from employee where id=#{id}
+        <!--<foreach collection="array" index="index" open="(" close=")" separator=",">
+        #{id}
+        </foreach>-->
     </delete>
 <!--    管理员更新用户-->
     <update id="updateUser" parameterType="map">
@@ -43,4 +46,22 @@
         phone_number=#{phone_number},email=#{email},date_of_birth=#{date_of_birth},department=#{department}
         where id=#{id}
     </update>
+<!--    用户性别分析-->
+    <select id="userGenderAnalysis" resultType="map">
+        select sex,count(*) as 'count' from employee group by sex
+    </select>
+<!--    查询员工表单信息-->
+    <select id="findDeviceAll" parameterType="map" resultType="map">
+        select * from device
+        <where>
+            <if test="dname!=null">
+                and dname like concat("%",concat(#{dname},"%"))
+            </if>
+        </where>
+        limit #{recordIndex},#{pagesize}
+    </select>
+<!--    查询员工表单数量，做分页-->
+    <select id="findCountDevice" resultType="int">
+        select count(*) from device
+    </select>
 </mapper>

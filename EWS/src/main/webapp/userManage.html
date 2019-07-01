@@ -184,53 +184,92 @@
     <button class="layui-btn layui-btn-danger" data-toggle="modal" data-target="#mainModal">
         <span class="layui-icon layui-icon-add-1"></span> 添加用户
     </button>
-    <button class="layui-btn layui-btn-danger">
+    <button class="layui-btn layui-btn-danger" onclick="deleteBatchById();">
         <span class="layui-icon layui-icon-delete"></span> 批量删除
     </button>
     <div class="layui-inline">
-        <input id="tool_uname" class="layui-input-block" placeholder="请输入用户名"/>
-        <a href="" class="layui-btn layui-btn-danger">
+        <input name="id" id="tool_ename" class="layui-input-block" placeholder="请输入用户名"/>
+        <button class="layui-btn layui-btn-danger" onclick="loadAllUserInfo();">
             <span class="layui-icon layui-icon-search"></span> 搜索
-        </a>
-        <a href="javascript:;" class="layui-btn layui-btn-danger">
+        </button>
+        <a href="javascript:reloadUserTable();" class="layui-btn layui-btn-danger">
             <span class="layui-icon layui-icon-refresh"></span> 刷新
         </a>
     </div>
 </script>
 <script type="text/javascript">
-    layui.use('table',function() {
-        layui.table.render({
-            elem: '#userTable',
-            url: 'user/userlist.do',
-            title:'用户信息列表',
-            id: 'userTable',
-            toolbar:'#tb1_tools',
-            method: 'post',
-            page: true,
-            limit:5,
-            limits:[5,10,20,50],
-            cols: [[
-                {type: 'checkbox'},
-                {field: 'id', title: 'ID', sort: true},
-                {field: 'ename', title: '用户名', sort: true},
-                {field: 'true_name', title: '真实名字', sort: true},
-                {field: 'sex', title: '性别', sort: true},
-                {field: 'phone_number', title: '电话', sort: true},
-                {field: 'email', title: '电子邮箱', sort: true},
-                {field: 'date_of_birth', title: '出生日期', sort: true},
-                {field: 'department', title: '部门', sort: true},
-                {
-                    field:'id',
-                    title:'操作',
-                    templet:function (row) {
-                        var del="<a href='javaScript:deleteUserInfoById("+row.id+")' title='删除'><span style='font-size: 25px;color: #FF0000;' class='layui-icon layui-icon-delete'></span></a>";
-                        var update="<button data-toggle='modal' data-target='#updateModal' title='更新' onclick='getRowId("+row.id+")'><span style='font-size: 25px;color: #0000FF;' class='layui-icon layui-icon-edit'></span></button>";
-                        return del+'<span style="color: gray;font-size: 30px">|</span>'+update;
-                    }
-                }
-            ]]
-        });
+    $(function () {
+        loadAllUserInfo();
     });
+    function loadAllUserInfo(){
+        layui.use('table',function() {
+            layui.table.render({
+                elem: '#userTable',
+                url: 'user/userlist.do',
+                where:{"ename":$("#tool_ename").val()},
+                title:'用户信息列表',
+                id: 'userTable',
+                toolbar:'#tb1_tools',
+                method: 'post',
+                page: true,
+                limit:5,
+                limits:[5,10,20,50],
+                cols: [[
+                    {type: 'checkbox'},
+                    {field: 'id', title: 'ID', sort: true},
+                    {field: 'ename', title: '用户名', sort: true},
+                    {field: 'true_name', title: '真实名字', sort: true},
+                    {field: 'sex', title: '性别', sort: true},
+                    {field: 'phone_number', title: '电话', sort: true},
+                    {field: 'email', title: '电子邮箱', sort: true},
+                    {field: 'date_of_birth', title: '出生日期', sort: true},
+                    {field: 'department', title: '部门', sort: true},
+                    {field: 'register_time', title: '用户注册时间', sort: true,templet: '<div>{{ layui.laytpl.toDateString(d.createdTime) }}</div>'},
+                    {field: 'last_exit_time', title: '最后一次登出时间', sort: true,templet: '<div>{{ layui.laytpl.toDateString(d.createdTime) }}</div>'},
+                    {
+                        field:'id',
+                        title:'操作',
+                        templet:function (row) {
+                            var del="<a href='javaScript:deleteUserInfoById("+row.id+")' title='删除'><span style='font-size: 25px;color: #FF0000;' class='layui-icon layui-icon-delete'></span></a>";
+                            var update="<button data-toggle='modal' data-target='#updateModal' title='更新' onclick='getRowId("+row.id+")'><span style='font-size: 25px;color: #0000FF;' class='layui-icon layui-icon-edit'></span></button>";
+                            return del+'<span style="color: gray;font-size: 30px">|</span>'+update;
+                        }
+                    }
+                ]]
+            });
+            //时间戳处理
+            layui.laytpl.toDateString = function(d, format){
+                var date = new Date(d || new Date())
+                    ,ymd = [
+                    this.digit(date.getFullYear(), 4)
+                    ,this.digit(date.getMonth() + 1)
+                    ,this.digit(date.getDate())
+                ]
+                    ,hms = [
+                    this.digit(date.getHours())
+                    ,this.digit(date.getMinutes())
+                    ,this.digit(date.getSeconds())
+                ];
+                format = format || 'yyyy-MM-dd HH:mm:ss';
+                return format.replace(/yyyy/g, ymd[0])
+                    .replace(/MM/g, ymd[1])
+                    .replace(/dd/g, ymd[2])
+                    .replace(/HH/g, hms[0])
+                    .replace(/mm/g, hms[1])
+                    .replace(/ss/g, hms[2]);
+            };
+            //数字前置补零
+            layui.laytpl.digit = function(num, length, end){
+                var str = '';
+                num = String(num);
+                length = length || 2;
+                for(var i = num.length; i < length; i++){
+                    str += '0';
+                }
+                return num < Math.pow(10, length) ? str + (num|0) : num;
+            };
+        });
+    }
     //打开前重置模态框表单数据
     $('#mainModal').on('show.bs.modal',function () {
        $('#userForm')[0].reset();
@@ -238,7 +277,7 @@
     $('#updateModal').on('show.bs.modal',function () {
         $('#updateUserForm')[0].reset();
     });
-    // 添加用户button点击事件
+    // 管理员添加用户button点击事件
     function submitUser() {
         $.ajax({
             url:'user/insertUser.do',
@@ -260,7 +299,7 @@
             }
         });
     }
-    //添加用户单个删除函数
+    //用户单个删除函数
     function deleteUserInfoById(id) {
         //提示是否删除
         layer.confirm("是否删除该用户?",{icon:3,title:"警告"},function () {
@@ -291,7 +330,6 @@
         $('#getRowId').html(id);
     }
     //添加修改用户函数
-    //String ename, String true_name, String sex, String phone_number, String email, String date_of_birth, String department
     function updateUser() {
         $.ajax({
             url:'user/updateUser.do',
@@ -312,6 +350,7 @@
                     layer.msg("修改users成功");
                     //刷新table
                     layui.table.reload("userTable");
+                    //关闭模态框
                     $("#updateModal").modal("hide");
                 } else{
                     layer.msg("修改失败",{icon: 2});
@@ -321,6 +360,46 @@
                 layer.msg("连接服务器失败！", {icon: 2});
             }
         });
+    }
+    //刷新userTable数据表格函数
+    function reloadUserTable() {
+        layui.table.reload("userTable");
+    }
+    //批量删除用户
+    function deleteBatchById() {
+        //获取数据表格的check选中数据
+        table=layui.table.checkStatus("userTable");
+        var str="";
+        $.each(table.data,function (index,arr) {
+            str+=arr.id+",";
+        });
+        if(str.length==0)
+            layer.msg("请选择要删除的用户");
+        else{
+            //提示是否删除
+            layer.confirm("是否删除该用户?",{icon:3,title:"警告"},function () {
+                //数据在table中layui删除，而不等于数据库删除
+                layer.closeAll();
+                //异步删除db数据
+                $.ajax({
+                    url:'user/deleteUserById.do',
+                    data:{"id":str},
+                    method:'post',
+                    success:function (result) {
+                        if (JSON.parse(result)=="success"){
+                            layer.msg("删除users成功");
+                            //刷新table
+                            layui.table.reload("userTable");
+                        } else{
+                            layer.msg("删除失败！", {icon: 2});
+                        }
+                    },
+                    error:function () {
+                        layer.msg("连接服务器失败！", {icon: 2});
+                    }
+                });
+            });
+        }
     }
 </script>
 </html>

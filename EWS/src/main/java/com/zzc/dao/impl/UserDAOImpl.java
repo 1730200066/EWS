@@ -80,13 +80,18 @@ public class UserDAOImpl implements IUserDAO {
         int i=sqlSession.insert(statement,map);
         return i;
     }
-    //根据id单个删除用户
+    //根据id删除用户
     @Override
-    public int deleteUserById(int id) {
-        SqlSession sqlSession=sqlSessionFactory.openSession(true);
-        String statement="com.zzc.mapping.userMapper.deleteUserById";
-        int i=sqlSession.delete(statement,id);
-        return i;
+    public int deleteUserById(String id) {
+        try{
+            SqlSession sqlSession=sqlSessionFactory.openSession(true);
+            String statement="com.zzc.mapping.userMapper.deleteUserById";
+            int i=sqlSession.delete(statement,id);
+            return i;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return 0;
     }
     //管理员更新用户
     @Override
@@ -106,4 +111,28 @@ public class UserDAOImpl implements IUserDAO {
         return i;
     }
 
+    //用户性别分析
+    @Override
+    public List<Map<String,String>> userGenderAnalysis() {
+        SqlSession sqlSession=sqlSessionFactory.openSession(true);
+        String statement="com.zzc.mapping.userMapper.userGenderAnalysis";
+        List<Map<String,String>> list = sqlSession.selectList(statement);
+        return list;
+    }
+    //查询设备表单信息
+    @Override
+    public List<Map<String, String>> deviceList(Map map) {
+        SqlSession sqlSession=sqlSessionFactory.openSession(true);
+        String statement="com.zzc.mapping.userMapper.findDeviceAll";
+        List<Map<String,String>> list = sqlSession.selectList(statement,map);
+        return list;
+    }
+    //查询设备表单数量，做分页
+    @Override
+    public int deviceCount() {
+        SqlSession sqlSession=sqlSessionFactory.openSession(true);
+        String statement="com.zzc.mapping.userMapper.findCountDevice";
+        int count=sqlSession.selectOne(statement);
+        return count;
+    }
 }

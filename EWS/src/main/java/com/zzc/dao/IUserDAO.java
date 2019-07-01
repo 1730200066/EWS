@@ -16,8 +16,14 @@ public interface IUserDAO {
     public List<Map<String,String>> retrieve(String email);
     //管理员添加用户
     public int insertUser(String ename,String true_name,String sex,String phone_number,String email,String date_of_birth,String department);
-    //根据id单个删除用户
-    public int deleteUserById(int id);
+    //根据id删除用户
+    public int deleteUserById(String id);
     //管理员更新用户
     public int updateUser(int id,String ename,String true_name,String sex,String phone_number,String email,String date_of_birth,String department);
+    //用户性别分析
+    public List<Map<String,String>> userGenderAnalysis();
+    //查询设备表单信息
+    public List<Map<String,String>> deviceList(Map map);
+    //查询设备表单数量，做分页
+    public int deviceCount();
 }

@@ -45,14 +45,29 @@ public class UserServiceImpl implements IUserService {
     public int insertUser(String ename, String true_name, String sex, String phone_number, String email, String date_of_birth, String department) {
         return userDAOImpl.insertUser(ename,true_name,sex,phone_number,email,date_of_birth,department);
     }
-    //根据id单个删除用户
+    //根据id删除用户
     @Override
-    public int deleteUserById(int id) {
+    public int deleteUserById(String id) {
         return userDAOImpl.deleteUserById(id);
     }
     //管理员更新用户
     @Override
     public int updateUser(int id,String ename, String true_name, String sex, String phone_number, String email, String date_of_birth, String department) {
         return userDAOImpl.updateUser(id,ename,true_name,sex,phone_number,email,date_of_birth,department);
+    }
+    //用户性别分析
+    @Override
+    public List<Map<String, String>> userGenderAnalysis() {
+        return userDAOImpl.userGenderAnalysis();
+    }
+    //查询设备表单信息
+    @Override
+    public List<Map<String, String>> deviceList(Map map) {
+        return userDAOImpl.deviceList(map);
+    }
+    //查询设备表单数量，做分页
+    @Override
+    public int deviceCount() {
+        return userDAOImpl.deviceCount();
     }
 }
